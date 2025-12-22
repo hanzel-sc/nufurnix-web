@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './admin/auth/AuthContext';
 import { ProtectedRoute } from './admin/auth/ProtectedRoute';
-// import CatalogPage from './public/pages/CatalogPage';
-// import ProductDetailPage from './public/pages/ProductDetailPage';
-// import CartPage from './public/pages/CartPage';
-// import SubmissionConfirmationPage from './public/pages/SubmissionConfirmationPage';
+import CatalogPage from './users/pages/CataloguePage';
+import ProductDetailPage from './users/pages/ProductDetailPage';
+import CartPage from './users/pages/CartPage';
+import SubmissionConfirmationPage from './users/pages/SubmissionConfirmationPage';
 import LoginPage from './admin/pages/LoginPage';
 import DashboardPage from './admin/pages/DashboardPage';
 import CatalogManagementPage from './admin/pages/CatalogueManagementPage';
@@ -16,10 +16,10 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/*<Route path="/" element={<CatalogPage />} />*/}
-          {/*<Route path="/product/:id" element={<ProductDetailPage />} />*/}
-          {/*<Route path="/cart" element={<CartPage />} />*/}
-          {/*<Route path="/confirmation/:submissionId" element={<SubmissionConfirmationPage />} />*/}
+          <Route path="/" element={<CatalogPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/confirmation/:submissionId" element={<SubmissionConfirmationPage />} />
 
           <Route path="/admin/login" element={<LoginPage />} />
           <Route
