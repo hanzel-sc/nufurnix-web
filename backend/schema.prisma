@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CatalogItem {
+  id             String   @id @default(uuid())
+  name           String
+  category       String
+  description    String
+  specifications Json
+  applications   String[]
+  images         String[]
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  submissionItems SubmissionItem[]
+
+  @@index([category])
+  @@index([isActive])
+  @@map("catalog_items")
+}
+
+model Submission {
+  id           String   @id @default(uuid())
+  type         SubmissionType
+  customerName String
+  email        String
+  phone        String
+  notes        String?
+  createdAt    DateTime @default(now())
+
+  items SubmissionItem[]
+  order Order?
+
+  @@index([type])
+  @@index([createdAt])
+  @@map("submissions")
+}
+
+model SubmissionItem {
+  submissionId  String
+  catalogItemId String
+  quantity      Int
+
+  submission  Submission  @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  catalogItem CatalogItem @relation(fields: [catalogItemId], references: [id])
+
+  @@id([submissionId, catalogItemId])
+  @@map("submission_items")
+}
+
+model Order {
+  submissionId    String      @id
+  deliveryAddress String
+  orderStatus     OrderStatus @default(PLACED)
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([orderStatus])
+  @@map("orders")
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+enum SubmissionType {
+  ENQUIRY
+  ORDER
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
